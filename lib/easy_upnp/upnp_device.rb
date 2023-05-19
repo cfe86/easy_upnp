@@ -78,7 +78,7 @@ module EasyUpnp
       end
 
       location = service_definition(all_services.first)[:location]
-      Nori.new.parse(open(location) { |f| f.read })['root']['device']
+      Nori.new.parse(URI.open(location) { |f| f.read })['root']['device']
     end
   end
 end

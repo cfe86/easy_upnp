@@ -103,7 +103,7 @@ module EasyUpnp
       urn = definition[:st]
       root_uri = definition[:location]
 
-      xml = Nokogiri::XML(open(root_uri))
+      xml = Nokogiri::XML(URI.open(root_uri))
       xml.remove_namespaces!
 
       service = xml.xpath("//device/serviceList/service[serviceType=\"#{urn}\"]").first
@@ -113,7 +113,7 @@ module EasyUpnp
       else
         service = Nokogiri::XML(service.to_xml)
         service_definition_uri = URI.join(root_uri, service.xpath('service/SCPDURL').text).to_s
-        service_definition = open(service_definition_uri) { |f| f.read }
+        service_definition = URI.open(service_definition_uri) { |f| f.read }
 
         endpoint_url = ->(xpath) do
           URI.join(root_uri, service.xpath(xpath).text).to_s
